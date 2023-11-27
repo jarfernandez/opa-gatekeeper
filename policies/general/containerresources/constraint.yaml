@@ -1,0 +1,23 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sRequiredResources
+metadata:
+  name: container-must-have-cpu-requests-memory-limits-and-requests
+  annotations: 
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    labelSelector:
+      matchExpressions:
+        - key: "debug"
+          operator: NotIn
+          values:
+            - "true"
+  parameters:
+    limits:
+      - memory
+    requests:
+      - cpu
+      - memory
